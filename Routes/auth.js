@@ -5,6 +5,8 @@ const User = mongoose.model('User')
 const bycrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = require('../secret')
+// const requireLogin = require('../middleware/requireLogin')
+
 
 
 router.post('/signup', (req, res)=>{
@@ -58,12 +60,13 @@ router.post('/signup', (req, res)=>{
 })
 
 router.post('/login',(req, res)=>{
-    console.log(req.body) 
+    // console.log(req.body) 
+    const {email, password} = req.body
     if(!email || !password){
         return res.status(400).json({error : "please add email or password"}) 
         
     }
-    User.findOne({email: email})
+     User.findOne({email: email})
     .then((savedUser)=>{
         if(!savedUser){
             return res.status(400).json({error: "Invalid email or password"}) 
@@ -84,4 +87,11 @@ router.post('/login',(req, res)=>{
     })
 
 })
+// router.get('/topsecret',requireLogin,(req, res)=>{
+//     // console.log(req.headers)
+//     // console.log(req.user)
+//     res.send("Lets talk on call")
+// }) 
+
+
 module.exports = router
